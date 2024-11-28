@@ -39,7 +39,19 @@ namespace Model
         }
         private string _speciality;
 
-        public string Group { get; set; }
+        public string Group 
+        {
+            get
+            {
+                return _group;
+            }
+            set
+            {
+                _group = value;
+                OnPropertyChanged(nameof(Group));
+            }
+        }
+        private string _group;
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
