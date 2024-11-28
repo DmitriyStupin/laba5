@@ -13,7 +13,6 @@ namespace ViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<Student> Students { get; set; }
-
         public RelayCommand AddNewStudentCommand { get; set; }
         public RelayCommand RemoveStudentCommand { get; set; }
 
@@ -26,8 +25,16 @@ namespace ViewModel
             RemoveStudentCommand = new RelayCommand(RemoveStudent);
         }
 
-        public Student CurrentStudent { get; set; }
-        private StudentViewModel _student;
+        private Student _currentStudent;
+        public Student CurrentStudent
+        {
+            get => _currentStudent;
+            set
+            {
+                _currentStudent = value;
+                OnPropertyChanged(nameof(CurrentStudent));
+            }
+        }
 
         public void OnPropertyChanged(string propertyName)
         {
@@ -36,12 +43,23 @@ namespace ViewModel
 
         private void RemoveStudent()
         {
-            Students.Remove(CurrentStudent);
-            CurrentStudent = new Student();
-        }private void AddNewStudent()
+            if (CurrentStudent != null)
+            {
+                Students.Remove(CurrentStudent);
+                CurrentStudent = new Student();
+            }
+        }
+        private void AddNewStudent()
         {
+            Students.Add(new Student
+            {
+                Name = CurrentStudent.Name,
+                Speciality = CurrentStudent.Speciality,
+                Group = CurrentStudent.Group
+            });
+
+            // Очистить поля после добавления
             CurrentStudent = new Student();
-            Students.Add(CurrentStudent);
         }
     }
 }
